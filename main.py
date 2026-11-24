@@ -35,8 +35,12 @@ def main() -> None:
     target = Path(os.environ.get("ENTRY_OUTPUT", "/output/entry.txt"))
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(line, encoding="utf-8")
-    if target.read_text(encoding="utf-8") != line:
+    written = target.read_text(encoding="utf-8")
+    if written != line:
         raise ValueError("entry.txt read-back does not match the joke")
+    # Report what landed, so a human running the entry can see the
+    # exact bytes the judge will compare: the line plus its length.
+    print(f"{len(written)} chars: {written}")
 
 
 if __name__ == "__main__":
